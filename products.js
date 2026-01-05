@@ -58,9 +58,9 @@ function renderCatalog() {
   
   // Ordenar por precio ascendente
   itemsToRender.sort((a, b) => a.price - b.price);
-  
+
   catalog.innerHTML = itemsToRender.map(product => `
-    <article class="card" aria-label="Producto: ${product.name}, €${product.price.toFixed(2)}">
+    <article class="card" aria-label="Producto: ${product.name}, $${product.price.toFixed(2)}">
       <img 
         src="${product.img}" 
         alt="${product.name} - Amigurumi hecho a mano"
@@ -75,9 +75,30 @@ function renderCatalog() {
         <span class="card__label">Medidas:</span> 
         ${product.size.width} × ${product.size.height} cm
       </p>
-      <p class="card__price">€${product.price.toFixed(2)}</p>
+      <p class="card__price">$${product.price.toFixed(2)}</p>
     </article>
   `).join('');
+
+  // Lightbox: ver imagen en grande al presionar (mínimo JS, sin dependencias)
+  const catalogEl = document.getElementById('catalog');
+  const lightbox = document.getElementById('lightbox');
+  if (catalogEl && lightbox) {
+    // Delegación de eventos: abrir
+    catalogEl.onclick = (e) => {
+      const img = e.target.closest && e.target.closest('.card__img');
+      if (!img) return;
+      lightbox.innerHTML = `
+        <div class="lightbox__backdrop" tabindex="0">
+          <img src="${img.src}" alt="${img.alt}" class="lightbox__img" />
+        </div>`;
+      lightbox.hidden = false;
+      lightbox.querySelector('.lightbox__backdrop').focus();
+    };
+
+    // Cerrar con ESC o click en backdrop
+    window.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') lightbox.hidden = true; });
+    lightbox.onclick = (ev) => { if (ev.target.classList.contains('lightbox__backdrop')) lightbox.hidden = true; };
+  }
 }
 
 window.addEventListener('load', renderCatalog);
