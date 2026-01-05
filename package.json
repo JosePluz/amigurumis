@@ -1,0 +1,22 @@
+{
+  "name": "amigurumis-shop",
+  "version": "1.0.0",
+  "description": "Catálogo estático de amigurumis hechos a mano. Sitio ultra-minimalista sin dependencias.",
+  "author": "Artesana Creativa",
+  "license": "MIT",
+  "scripts": {
+    "serve": "npx serve .",
+    "dev": "npx live-server --port=3000",
+    "validate": "echo 'Validar en https://validator.w3.org y https://pagespeed.web.dev'"
+  },
+  "keywords": [
+    "amigurumi",
+    "handmade",
+    "static-site",
+    "render-deployment"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "devDependencies": {}
+}
