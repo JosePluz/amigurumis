@@ -22,6 +22,30 @@
     </div>
   </header>
 
+  <!-- Admin panel (local preview only) -->
+  <button id="adminToggle" class="admin-toggle" aria-expanded="false">Admin</button>
+  <section id="adminPanel" class="admin-panel" hidden aria-hidden="true">
+    <h2 class="admin-panel__title">Admin (preview local)</h2>
+    <form id="adminForm" class="admin-form">
+      <input type="hidden" id="prodId" />
+      <label>Nombre<br><input id="prodName" required /></label>
+      <label>Imagen (ruta en /img)<br><input id="prodImg" required /></label>
+      <label>Descripción<br><input id="prodDesc" /></label>
+      <label>Ancho (cm)<br><input id="prodW" type="number" min="0" /></label>
+      <label>Alto (cm)<br><input id="prodH" type="number" min="0" /></label>
+      <label>Precio<br><input id="prodPrice" type="number" step="0.01" min="0" required /></label>
+      <div class="admin-form__actions">
+        <button type="button" id="adminSave">Guardar</button>
+        <button type="button" id="adminAdd">Nuevo</button>
+        <button type="button" id="adminReset">Reset repo</button>
+        <button type="button" id="adminClose">Cerrar</button>
+      </div>
+    </form>
+
+    <h3>Productos (local)</h3>
+    <ul id="adminList" class="admin-list" aria-live="polite"></ul>
+  </section>
+
   <main class="main">
     <section class="catalog">
       <div id="catalog" class="catalog__grid"></div>

@@ -102,3 +102,103 @@ function renderCatalog() {
 }
 
 window.addEventListener('load', renderCatalog);
+
+// ------------------
+// ADMIN (preview local usando localStorage)
+// ------------------
+function getStoredProducts() {
+  const s = localStorage.getItem('products');
+  return s ? JSON.parse(s) : products.slice();
+}
+
+function saveStoredProducts(arr) {
+  localStorage.setItem('products', JSON.stringify(arr));
+  renderCatalog();
+  renderAdminList();
+}
+
+function renderAdminList() {
+  const list = document.getElementById('adminList');
+  if (!list) return;
+  const items = getStoredProducts();
+  list.innerHTML = items.map(p => `
+    <li>
+      <span>${p.name} — $${p.price.toFixed(2)}</span>
+      <span>
+        <button data-id="${p.id}" class="admin-edit">Editar</button>
+        <button data-id="${p.id}" class="admin-del">Borrar</button>
+      </span>
+    </li>
+  `).join('');
+
+  list.querySelectorAll('.admin-edit').forEach(btn => btn.onclick = (e) => {
+    const id = Number(e.target.dataset.id);
+    const prod = getStoredProducts().find(x => x.id === id);
+    if (!prod) return;
+    populateForm(prod);
+  });
+  list.querySelectorAll('.admin-del').forEach(btn => btn.onclick = (e) => {
+    const id = Number(e.target.dataset.id);
+    const remaining = getStoredProducts().filter(x => x.id !== id);
+    saveStoredProducts(remaining);
+  });
+}
+
+function populateForm(p) {
+  document.getElementById('prodId').value = p.id;
+  document.getElementById('prodName').value = p.name || '';
+  document.getElementById('prodImg').value = p.img || '';
+  document.getElementById('prodDesc').value = p.desc || '';
+  document.getElementById('prodW').value = p.size?.width || '';
+  document.getElementById('prodH').value = p.size?.height || '';
+  document.getElementById('prodPrice').value = p.price || '';
+}
+
+function clearForm() {
+  ['prodId','prodName','prodImg','prodDesc','prodW','prodH','prodPrice'].forEach(id => document.getElementById(id).value = '');
+}
+
+function initAdmin() {
+  const toggle = document.getElementById('adminToggle');
+  const panel = document.getElementById('adminPanel');
+  const close = document.getElementById('adminClose');
+  const save = document.getElementById('adminSave');
+  const add = document.getElementById('adminAdd');
+  const reset = document.getElementById('adminReset');
+
+  if (!toggle || !panel) return;
+  toggle.onclick = () => { panel.hidden = !panel.hidden; panel.setAttribute('aria-hidden', String(panel.hidden)); toggle.setAttribute('aria-expanded', String(!panel.hidden)); renderAdminList(); };
+  close.onclick = () => { panel.hidden = true; panel.setAttribute('aria-hidden','true'); toggle.setAttribute('aria-expanded','false'); };
+  add.onclick = () => { clearForm(); document.getElementById('prodName').focus(); };
+  reset.onclick = () => { localStorage.removeItem('products'); renderCatalog(); renderAdminList(); clearForm(); };
+
+  save.onclick = () => {
+    const idVal = document.getElementById('prodId').value;
+    const name = document.getElementById('prodName').value.trim();
+    const img = document.getElementById('prodImg').value.trim();
+    const desc = document.getElementById('prodDesc').value.trim();
+    const w = Number(document.getElementById('prodW').value) || 0;
+    const h = Number(document.getElementById('prodH').value) || 0;
+    const price = Number(document.getElementById('prodPrice').value) || 0;
+    if (!name || !img) { alert('Nombre e imagen son obligatorios'); return; }
+
+    const arr = getStoredProducts();
+    if (idVal) {
+      const id = Number(idVal);
+      const idx = arr.findIndex(x => x.id === id);
+      if (idx >= 0) {
+        arr[idx] = { id, name, img, desc, size: { width: w, height: h }, price };
+      }
+    } else {
+      const newId = (arr.reduce((m,x)=> Math.max(m,x.id), 0) || 0) + 1;
+      arr.push({ id: newId, name, img, desc, size: { width: w, height: h }, price });
+    }
+    saveStoredProducts(arr);
+    clearForm();
+  };
+
+  // Inicializar lista
+  renderAdminList();
+}
+
+window.addEventListener('load', () => { initAdmin(); });
