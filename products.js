@@ -1,39 +1,6 @@
 // EDITAR: solo cambiar este archivo para agregar/borrar productos.
-// imgs: array de rutas a imágenes (JPG, PNG, SVG, WEBP, etc.)
-export const products = [
-  {
-    id: 1,
-    name: "Osito Sonriente",
-    imgs: ["img/amigurumi-1.svg"],
-    desc: "Oso tierno en tonos cálidos, perfecto para abrazar. Relleno 100% algodón.",
-    size: { width: 15, height: 20 },
-    price: 28.50
-  },
-  {
-    id: 2,
-    name: "Gato Pastel",
-    imgs: ["img/amigurumi-2.svg"],
-    desc: "Gatito adorable en colores pastel. Ideal para decoración o regalo especial.",
-    size: { width: 12, height: 18 },
-    price: 24.00
-  },
-  {
-    id: 3,
-    name: "Conejo Rosa",
-    imgs: ["img/amigurumi-3.svg"],
-    desc: "Conejo con orejas largas en rosa intenso. Super kawaii y suave.",
-    size: { width: 10, height: 22 },
-    price: 26.00
-  },
-  {
-    id: 4,
-    name: "Lola Cutis",
-    imgs: ["img/lolo.jpg"],
-    desc: "Amigurumi adorable y suave con detalles únicos.",
-    size: { width: 14, height: 18 },
-    price: 35.00
-  }
-];
+// Estructura: id, name, imgs (array de rutas), desc, size, price
+export const products = [];
 
 // Renderizar catálogo
 function renderCatalog() {
