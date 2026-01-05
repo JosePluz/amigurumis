@@ -1,9 +1,10 @@
 // EDITAR: solo cambiar este archivo para agregar/borrar productos.
+// imgs: array de rutas a imágenes (JPG, PNG, SVG, WEBP, etc.)
 export const products = [
   {
     id: 1,
     name: "Osito Sonriente",
-    img: "img/amigurumi-1.svg",
+    imgs: ["img/amigurumi-1.svg"],
     desc: "Oso tierno en tonos cálidos, perfecto para abrazar. Relleno 100% algodón.",
     size: { width: 15, height: 20 },
     price: 28.50
@@ -11,7 +12,7 @@ export const products = [
   {
     id: 2,
     name: "Gato Pastel",
-    img: "img/amigurumi-2.svg",
+    imgs: ["img/amigurumi-2.svg"],
     desc: "Gatito adorable en colores pastel. Ideal para decoración o regalo especial.",
     size: { width: 12, height: 18 },
     price: 24.00
@@ -19,34 +20,18 @@ export const products = [
   {
     id: 3,
     name: "Conejo Rosa",
-    img: "img/amigurumi-3.svg",
+    imgs: ["img/amigurumi-3.svg"],
     desc: "Conejo con orejas largas en rosa intenso. Super kawaii y suave.",
     size: { width: 10, height: 22 },
     price: 26.00
   },
   {
     id: 4,
-    name: "Oveja Nube",
-    img: "img/amigurumi-1.svg",
-    desc: "Oveja esponjosa y acogedora. Perfecta para animar cualquier rincón.",
-    size: { width: 16, height: 14 },
-    price: 32.00
-  },
-  {
-    id: 5,
-    name: "Pulpito Bebé",
-    img: "img/amigurumi-2.svg",
-    desc: "Pulpo diminuto con tentáculos regordetes. Hecho a mano con amor.",
-    size: { width: 9, height: 12 },
-    price: 22.00
-  },
-  {
-    id: 6,
-    name: "Mariquita Feliz",
-    img: "img/amigurumi-3.svg",
-    desc: "Mariquita roja brillante. Colorida y llena de energía positiva.",
-    size: { width: 8, height: 10 },
-    price: 18.50
+    name: "Lola Cutis",
+    imgs: ["img/lolo.jpg"],
+    desc: "Amigurumi adorable y suave con detalles únicos.",
+    size: { width: 14, height: 18 },
+    price: 35.00
   }
 ];
 
@@ -54,7 +39,16 @@ export const products = [
 function renderCatalog() {
   const catalog = document.getElementById('catalog');
   const storedProducts = localStorage.getItem('products');
-  const itemsToRender = storedProducts ? JSON.parse(storedProducts) : products;
+  let itemsToRender = storedProducts ? JSON.parse(storedProducts) : products;
+  
+  // Migración: convertir "img" a "imgs" si existen datos viejos
+  itemsToRender = itemsToRender.map(p => ({
+    ...p,
+    imgs: p.imgs || (p.img ? [p.img] : [])
+  }));
+
+  // Validar que existan imágenes y filtrar productos sin imágenes válidas
+  itemsToRender = itemsToRender.filter(p => p.imgs && p.imgs.length > 0);
   
   // Ordenar por precio ascendente
   itemsToRender.sort((a, b) => a.price - b.price);
@@ -62,7 +56,7 @@ function renderCatalog() {
   catalog.innerHTML = itemsToRender.map(product => `
     <article class="card" aria-label="Producto: ${product.name}, $${product.price.toFixed(2)}">
       <img 
-        src="${product.img}" 
+        src="${product.imgs[0]}" 
         alt="${product.name} - Amigurumi hecho a mano"
         class="card__img"
         loading="lazy"
@@ -71,6 +65,7 @@ function renderCatalog() {
       />
       <h3 class="card__name">${product.name}</h3>
       <p class="card__desc">${product.desc}</p>
+      ${product.imgs.length > 1 ? `<p class="card__badge">+${product.imgs.length - 1} fotos</p>` : ''}
       <p class="card__size">
         <span class="card__label">Medidas:</span> 
         ${product.size.width} × ${product.size.height} cm
@@ -87,12 +82,40 @@ function renderCatalog() {
     catalogEl.onclick = (e) => {
       const img = e.target.closest && e.target.closest('.card__img');
       if (!img) return;
+      const card = img.closest('.card');
+      const productName = card.querySelector('.card__name').textContent;
+      const productIdx = itemsToRender.findIndex(p => p.name === productName);
+      const product = itemsToRender[productIdx];
+      if (!product) return;
+
+      // Galería: mostrar todas las imágenes del producto
+      const galleryHTML = product.imgs.length > 1 
+        ? `<div class="lightbox__gallery">
+             <img src="${product.imgs[0]}" alt="${productName}" class="lightbox__img" />
+             <div class="lightbox__thumbs">
+               ${product.imgs.map((imgSrc, idx) => `
+                 <button class="lightbox__thumb ${idx === 0 ? 'active' : ''}" data-src="${imgSrc}" aria-label="Foto ${idx+1}"></button>
+               `).join('')}
+             </div>
+           </div>`
+        : `<img src="${product.imgs[0]}" alt="${productName}" class="lightbox__img" />`;
+
       lightbox.innerHTML = `
         <div class="lightbox__backdrop" tabindex="0">
-          <img src="${img.src}" alt="${img.alt}" class="lightbox__img" />
+          ${galleryHTML}
         </div>`;
       lightbox.hidden = false;
       lightbox.querySelector('.lightbox__backdrop').focus();
+
+      // Click en miniaturas
+      lightbox.querySelectorAll('.lightbox__thumb').forEach(thumb => {
+        thumb.onclick = (ev) => {
+          const src = ev.target.dataset.src;
+          lightbox.querySelector('.lightbox__img').src = src;
+          lightbox.querySelectorAll('.lightbox__thumb').forEach(t => t.classList.remove('active'));
+          ev.target.classList.add('active');
+        };
+      });
     };
 
     // Cerrar con ESC o click en backdrop
@@ -147,7 +170,7 @@ function renderAdminList() {
 function populateForm(p) {
   document.getElementById('prodId').value = p.id;
   document.getElementById('prodName').value = p.name || '';
-  document.getElementById('prodImg').value = p.img || '';
+  document.getElementById('prodImg').value = (p.imgs && p.imgs[0]) || p.img || '';
   document.getElementById('prodDesc').value = p.desc || '';
   document.getElementById('prodW').value = p.size?.width || '';
   document.getElementById('prodH').value = p.size?.height || '';
@@ -187,11 +210,11 @@ function initAdmin() {
       const id = Number(idVal);
       const idx = arr.findIndex(x => x.id === id);
       if (idx >= 0) {
-        arr[idx] = { id, name, img, desc, size: { width: w, height: h }, price };
+        arr[idx] = { id, name, imgs: [img], desc, size: { width: w, height: h }, price };
       }
     } else {
       const newId = (arr.reduce((m,x)=> Math.max(m,x.id), 0) || 0) + 1;
-      arr.push({ id: newId, name, img, desc, size: { width: w, height: h }, price });
+      arr.push({ id: newId, name, imgs: [img], desc, size: { width: w, height: h }, price });
     }
     saveStoredProducts(arr);
     clearForm();
