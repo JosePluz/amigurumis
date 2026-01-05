@@ -155,12 +155,31 @@ function initAdmin() {
   const save = document.getElementById('adminSave');
   const add = document.getElementById('adminAdd');
   const reset = document.getElementById('adminReset');
+  const exportBtn = document.getElementById('adminExport');
+  const exportModal = document.getElementById('exportModal');
+  const exportCode = document.getElementById('exportCode');
+  const exportCopy = document.getElementById('exportCopy');
+  const exportClose = document.getElementById('exportClose');
 
   if (!toggle || !panel) return;
   toggle.onclick = () => { panel.hidden = !panel.hidden; panel.setAttribute('aria-hidden', String(panel.hidden)); toggle.setAttribute('aria-expanded', String(!panel.hidden)); renderAdminList(); };
   close.onclick = () => { panel.hidden = true; panel.setAttribute('aria-hidden','true'); toggle.setAttribute('aria-expanded','false'); };
   add.onclick = () => { clearForm(); document.getElementById('prodName').focus(); };
   reset.onclick = () => { localStorage.removeItem('products'); renderCatalog(); renderAdminList(); clearForm(); };
+
+  // Exportar código
+  exportBtn.onclick = () => {
+    const arr = getStoredProducts();
+    const code = `export const products = ${JSON.stringify(arr, null, 2)};`;
+    exportCode.value = code;
+    exportModal.hidden = false;
+  };
+  exportCopy.onclick = () => {
+    exportCode.select();
+    document.execCommand('copy');
+    alert('✅ Código copiado. Pega en products.js');
+  };
+  exportClose.onclick = () => { exportModal.hidden = true; };
 
   save.onclick = () => {
     const idVal = document.getElementById('prodId').value;

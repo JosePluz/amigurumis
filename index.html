@@ -37,6 +37,7 @@
       <div class="admin-form__actions">
         <button type="button" id="adminSave">Guardar</button>
         <button type="button" id="adminAdd">Nuevo</button>
+        <button type="button" id="adminExport">Exportar</button>
         <button type="button" id="adminReset">Reset repo</button>
         <button type="button" id="adminClose">Cerrar</button>
       </div>
@@ -44,6 +45,18 @@
 
     <h3>Productos (local)</h3>
     <ul id="adminList" class="admin-list" aria-live="polite"></ul>
+
+    <!-- Modal para exportar código -->
+    <div id="exportModal" class="export-modal" hidden>
+      <div class="export-modal__content">
+        <h3>Copiar código para products.js</h3>
+        <textarea id="exportCode" class="export-code" readonly></textarea>
+        <div class="export-modal__actions">
+          <button id="exportCopy">Copiar al portapapeles</button>
+          <button id="exportClose">Cerrar</button>
+        </div>
+      </div>
+    </div>
   </section>
 
   <main class="main">

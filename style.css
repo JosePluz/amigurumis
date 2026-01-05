@@ -349,3 +349,51 @@ body {
 .admin-list { list-style:none; padding:0; margin:0; }
 .admin-list li { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #f5f5f5 }
 .admin-list button { background:transparent; border:none; color:#FF7AA2; cursor:pointer }
+
+/* Export Modal */
+.export-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+}
+
+.export-modal[hidden] { display: none; }
+
+.export-modal__content {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow: auto;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+
+.export-code {
+  width: 100%;
+  height: 250px;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 0.8rem;
+  margin: 1rem 0;
+}
+
+.export-modal__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.export-modal__actions button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #FF7AA2;
+  color: white;
+}
