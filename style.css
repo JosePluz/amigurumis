@@ -325,6 +325,7 @@ body {
   border-radius: 999px;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(255,122,162,0.2);
+  z-index: 9998;
 }
 
 .admin-panel {
@@ -396,4 +397,243 @@ body {
   cursor: pointer;
   background: #FF7AA2;
   color: white;
+}
+
+/* ===========================
+   MODAL & ADMIN PANEL (NEW)
+   =========================== */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+}
+
+.modal__content {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 400px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+}
+
+.modal__content h2 {
+  margin-top: 0;
+  color: #FF7AA2;
+}
+
+.modal__content input {
+  width: 100%;
+  padding: 0.75rem;
+  margin: 1rem 0;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.modal__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 1.5rem;
+}
+
+.modal__actions button {
+  flex: 1;
+  padding: 0.75rem;
+  background: #FF7AA2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Admin Panel */
+.admin {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+  max-width: 500px;
+  height: 100vh;
+  background: white;
+  box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+  z-index: 9999;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.admin__header {
+  background: #FF7AA2;
+  color: white;
+  padding: 1.5rem;
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin__header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.admin__close {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.admin__body {
+  padding: 1.5rem;
+}
+
+.admin__section {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.admin__section h3 {
+  margin-top: 0;
+  color: #333;
+  font-size: 1rem;
+}
+
+.admin-form label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  color: #555;
+}
+
+.admin-form label input,
+.admin-form label textarea,
+.admin-form label select {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+.admin-form label small {
+  display: block;
+  margin-top: 0.25rem;
+  color: #999;
+  font-size: 0.8rem;
+}
+
+.admin-form__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.admin-form__actions button {
+  flex: 1;
+  min-width: 100px;
+  padding: 0.6rem;
+  background: #FF7AA2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.admin-form__actions button:hover {
+  background: #ff5a88;
+}
+
+.admin-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-list li {
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 1rem;
+}
+
+.admin-list strong {
+  display: block;
+  color: #333;
+}
+
+.admin-list small {
+  color: #999;
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.admin-list div:last-child {
+  display: flex;
+  gap: 6px;
+}
+
+.admin-list button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #FF7AA2;
+  font-size: 0.9rem;
+  padding: 0.25rem 0.5rem;
+  white-space: nowrap;
+}
+
+.admin__footer {
+  padding: 1rem;
+  background: #f9f9f9;
+  text-align: center;
+  border-top: 1px solid #eee;
+  position: sticky;
+  bottom: 0;
+}
+
+.btn-primary {
+  background: #FF7AA2;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.btn-primary:hover {
+  background: #ff5a88;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .admin {
+    max-width: 100%;
+  }
 }
