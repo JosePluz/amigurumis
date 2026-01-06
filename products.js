@@ -1,31 +1,18 @@
 /**
  * Catálogo de Productos - Amigurumis
- * Generado: 6/1/2026, 12:19:48
- * Total productos: 2
+ * Generado: 6/1/2026, 12:20:43
+ * Total productos: 1
  */
 
 export const products = [
   {
-    "id": 1767671851292,
-    "name": "pikachu",
-    "desc": "gay",
-    "price": 800,
-    "size": {
-      "width": 70,
-      "height": 50
-    },
-    "imgs": [
-      "img/atardecer.jpg"
-    ]
-  },
-  {
-    "id": 1767671888176,
+    "id": 1767723636131,
     "name": "klo",
-    "desc": "h",
-    "price": 55667,
+    "desc": "vgvfty",
+    "price": 654,
     "size": {
-      "width": 3464,
-      "height": 647
+      "width": 56,
+      "height": 55
     },
     "imgs": [
       "img/paco.webp"
